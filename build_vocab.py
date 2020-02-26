@@ -28,6 +28,7 @@ class Vocabulary:
 def build_vocab(json):
     coco = COCO(json)
     vocab = Vocabulary()
+    vocab.add('<pad>')
     vocab.add('<unk>')
     vocab.add('<start>')
     vocab.add('<end>')
