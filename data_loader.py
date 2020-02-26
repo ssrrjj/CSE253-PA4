@@ -23,7 +23,10 @@ class CocoDataset(data.Dataset):
         """
         self.root = root
         self.coco = COCO(json)
-        self.ids = ids
+        self.ids = []
+        for idx in ids:
+            anns = self.coco.imgToAnns[idx]
+            self.ids += [ann['id'] for ann in anns]
         self.vocab = vocab
         self.transform = transform
 
