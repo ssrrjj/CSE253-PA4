@@ -19,6 +19,19 @@ class Img_Caption(nn.Module):
         hiddens, _ = self.rnn(decoder_input)
         out = self.output(hiddens[0])
         return out
+    
+    def sample(self, features,max_length ,states=None):
+        sampled_ids = []
+        inputs = features.unsqueeze(1)
+        for i in range(max_length):
+            hiddens, states = self.rnn(inputs, states)          # hiddens: (batch_size, 1, hidden_size)
+            outputs = self.output(hiddens.squeeze(1))            # outputs:  (batch_size, vocab_size)
+            predicted = torch.argmax(outputs ,axis =1)                  # predicted: (batch_size)
+            sampled_ids.append(predicted)
+            inputs = self.embed(predicted)                       # inputs: (batch_size, embed_size)
+            inputs = inputs.unsqueeze(1)                         # inputs: (batch_size, 1, embed_size)
+        sampled_ids = torch.stack(sampled_ids, 1)                # sampled_ids: (batch_size, max_seq_length)
+        return sampled_ids
         
 def res50_encoder(num_out):
     res_model = models.resnet50(pretrained=True)
