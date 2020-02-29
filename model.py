@@ -9,7 +9,7 @@ class Img_Caption(nn.Module):
         self.embed = nn.Embedding(vocab_size, embed_dim)
         if embed_weight is not None:
             self.embed.load_state_dict({'weight': embed_weight})
-            self.embed.weight.requires_grad = False
+            self.embed.weight.requires_grad = True
         self.rnn = rnn(embed_dim, hidden_dim, num_rnn_layers, batch_first= True)
         self.output = nn.Linear(hidden_dim, vocab_size)
         
