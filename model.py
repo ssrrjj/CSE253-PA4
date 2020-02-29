@@ -3,10 +3,13 @@ import torchvision.models as models
 import torch.nn as nn
 
 class Img_Caption(nn.Module):
-    def __init__(self, encoder, rnn, vocab_size, embed_dim,hidden_dim, num_rnn_layers = 1):
+    def __init__(self, encoder, rnn, vocab_size, embed_dim,hidden_dim, num_rnn_layers = 1, embed_weight = None):
         super().__init__()
         self.encoder = encoder
         self.embed = nn.Embedding(vocab_size, embed_dim)
+        if embed_weight is not None:
+            self.embed.load_state_dict({'weight': embed_weight})
+            self.embed.weight.requires_grad = False
         self.rnn = rnn(embed_dim, hidden_dim, num_rnn_layers, batch_first= True)
         self.output = nn.Linear(hidden_dim, vocab_size)
         
