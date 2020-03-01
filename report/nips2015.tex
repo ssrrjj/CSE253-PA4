@@ -73,7 +73,7 @@ The encoder will take the image as input and encode it into a vector of feature 
     \centering
      \includegraphics[width=0.8\textwidth]{RNNloss}
     \caption{Training and validation loss of vanilla RNN}
-    \label{loss_fcn}
+    \label{RNNloss}
 \end{figure}
 
 \begin{figure}[htb!]
@@ -81,6 +81,13 @@ The encoder will take the image as input and encode it into a vector of feature 
      \includegraphics[width=0.8\textwidth]{lstm_no_pretrain_loss.png}
     \caption{Training and validation loss of LSTM without pretrained embedding}
     \label{loss_lstm_no}
+\end{figure}
+
+\begin{figure}[htb!]
+    \centering
+     \includegraphics[width=0.8\textwidth]{LSTM_pretrainedloss}
+    \caption{Training and validation loss of LSTM with pretrained embedding}
+    \label{LSTM_pre_loss}
 \end{figure}
 
 
@@ -92,10 +99,6 @@ In this section, we will show the performance of our networks and discuss the re
 In this section, we show the BLEU-1 and BLEU-4 socres of our models.\\
 The result of the baseline model is shown in Table.\ref{baseline_table}. In the table, we can see that when Temperature = 0.1 the model performs the best. When Temperature is very little, stochastic approach is close to deterministic approach. The reason is that when Temperature is very low, the word with highest probability will equal to 1 which is quite same as the deterministic approach.
 
-\subsection{pre-trained word embeddings}
-In this section, we show the performance of the network using pretrained word embeddings.
-
-
 \begin{table}[htb!]
     \begin{tabular}{lllllll}
     Temperature & 0.1   & 0.2   & 0.7   & 1     & 1.5   & 2     \\
@@ -103,7 +106,27 @@ In this section, we show the performance of the network using pretrained word em
     BLEU-4      & 17.3  & 17.13 & 15.41 & 13.16 & 5.66  & 3.48 
     \end{tabular}
     \caption{BLEU-1 and BLEU-4 scores of the baseline model with the stochastic approach}
-    \label{baseline_table}    
+    \label{baseline_table}  
+\end{table}
+
+\subsection{pre-trained word embeddings}
+In this section, we show the performance of the network using pretrained word embeddings.
+
+
+
+
+\begin{table}[!htb]
+    \caption{BLEU-1 and BLEU-4 scores}
+    \label{acc}
+    \centering
+    \begin{tabular}{l|c|c|}
+        \hline
+        model & BLEU-1 & BLEU-4 \\
+		\hline
+		LSTM with pretrained word embedding&87.31&19.02\\
+	    \hline
+    \end{tabular}
+
 \end{table}
 
 \section{Individual Contribution}
