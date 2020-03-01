@@ -12,7 +12,7 @@ from pycocotools.coco import COCO
 
 class CocoDataset(data.Dataset):
     """COCO Custom Dataset compatible with torch.utils.data.DataLoader."""
-    def __init__(self, root, json, ids, vocab, transform=None):
+    def __init__(self, root, json, ids, vocab,mode, transform=None):
         """Set the path for images, captions and vocabulary wrapper.
         
         Args:
@@ -22,11 +22,16 @@ class CocoDataset(data.Dataset):
             transform: image transformer.
         """
         self.root = root
+        self.mode = mode
         self.coco = COCO(json)
+        
         self.ids = []
         for idx in ids:
             anns = self.coco.imgToAnns[idx]
-            self.ids += [ann['id'] for ann in anns]
+            if mode == 'train':
+                self.ids += [ann['id'] for ann in anns]
+            else:
+                self.ids+=[anns[0]['id']]
         self.vocab = vocab
         self.transform = transform
 
@@ -38,7 +43,7 @@ class CocoDataset(data.Dataset):
         caption = coco.anns[ann_id]['caption']
         img_id = coco.anns[ann_id]['image_id']
         path = coco.loadImgs(img_id)[0]['file_name']
-
+        
         image = Image.open(os.path.join(self.root, path)).convert('RGB')
         if self.transform is not None:
             image = self.transform(image)
@@ -87,13 +92,14 @@ def collate_fn(data):
         targets[i, :end] = cap[:end]        
     return images, targets, lengths
 
-def get_loader(root, json, ids, vocab, transform, batch_size, shuffle, num_workers):
+def get_loader(root, json, ids, vocab, mode, transform, batch_size, shuffle, num_workers):
     """Returns torch.utils.data.DataLoader for custom coco dataset."""
     # COCO caption dataset
     coco = CocoDataset(root=root,
                        json=json,
                        ids = ids,
                        vocab=vocab,
+                       mode = mode,
                        transform=transform)
     
     # Data loader for COCO dataset

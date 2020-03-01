@@ -14,9 +14,15 @@ class Img_Caption(nn.Module):
             self.embed.weight.requires_grad = True
         self.rnn = rnn(embed_dim, hidden_dim, num_rnn_layers, batch_first= True)
         self.output = nn.Linear(hidden_dim, vocab_size)
+        #self.bn = nn.BatchNorm1d(embed_dim, momentum=0.01)
         
     def forward(self, img, caption, lengths):
+<<<<<<< HEAD
         img_ftr = self.bn(self.encoder(img))
+=======
+        img_ftr = self.encoder(img)
+        
+>>>>>>> f44d66d87ee06a172cc798587a3a0bcea0909407
         embed = self.embed(caption)
         
         embed = torch.cat((img_ftr.unsqueeze(1), embed), 1)
