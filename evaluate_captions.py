@@ -14,18 +14,20 @@ def evaluate_captions( true_captions_path, generated_captions_path ):
     """
     
  
-    
+    coco = COCO(true_captions_path)
+    cocoRes = coco.loadRes(generated_captions_path)
     score1 = 0
     score4 = 0
 
     smoother = SmoothingFunction()
     
     count = 0
-    for candidate, reference in tqdm(zip(open(generated_captions_path), open(true_captions_path))) :
-#         candidate = cocoRes.imgToAnns[i][0]['caption']
-#         reference = []
-#         for entry in coco.imgToAnns[i]:
-#             reference.append(entry['caption'])
+    for i in tqdm(cocoRes.getImgIds()):
+#    for candidate, reference in tqdm(zip(open(generated_captions_path), open(true_captions_path))) :
+        candidate = cocoRes.imgToAnns[i][0]['caption']
+        reference = []
+        for entry in coco.imgToAnns[i]:
+            reference.append(entry['caption'])
         count += 1
         score1 += sentence_bleu(reference, candidate, weights=(1, 0, 0, 0), smoothing_function=smoother.method1)
         score4 += sentence_bleu(reference, candidate, weights=(0, 0, 0, 1), smoothing_function=smoother.method1)
