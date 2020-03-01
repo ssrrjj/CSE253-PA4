@@ -9,3 +9,4 @@ data/
 glove.*
 best_model
 loss_lstm_pretrained
+*.txt

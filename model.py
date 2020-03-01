@@ -1,6 +1,7 @@
 import torch
 import torchvision.models as models
 import torch.nn as nn
+import numpy as np
 
 class Img_Caption(nn.Module):
     def __init__(self, encoder, rnn, vocab_size, embed_dim,hidden_dim, num_rnn_layers = 1, embed_weight = None):
@@ -9,6 +10,7 @@ class Img_Caption(nn.Module):
         self.embed = nn.Embedding(vocab_size, embed_dim)
         if embed_weight is not None:
             self.embed.load_state_dict({'weight': embed_weight})
+            self.embed.weight.requires_grad = True
         self.rnn = rnn(embed_dim, hidden_dim, num_rnn_layers, batch_first= True)
         self.output = nn.Linear(hidden_dim, vocab_size)
         
@@ -34,6 +36,28 @@ class Img_Caption(nn.Module):
             inputs = inputs.unsqueeze(1)                         # inputs: (batch_size, 1, embed_size)
         sampled_ids = torch.stack(sampled_ids, 1)                # sampled_ids: (batch_size, max_seq_length)
         return sampled_ids
+    
+    def Stochastic_sample(self, features, max_length ,states = None, temp = 1):
+        sampled_ids = []
+        inputs = features.unsqueeze(1)
+        for i in range(max_length):
+            hiddens, states = self.rnn(inputs, states)          # hiddens: (batch_size, 1, hidden_size)
+            outputs = self.output(hiddens.squeeze(1))            # outputs:  (batch_size, vocab_size)
+            prob = nn.functional.softmax(outputs / temp, dim=1)
+            batch_size = outputs.shape[0]
+            
+            predicted = torch.argmax(outputs ,axis =1)                  # predicted: (batch_size)
+            
+            for j in range(batch_size):
+                #predicted[j] = torch.as_tensor(np.random.choice( range(outputs.shape[1]), p = prob[j].cpu().data.numpy()))
+                predicted[j] = torch.multinomial(prob[j], 1)
+                
+            sampled_ids.append(predicted)
+            inputs = self.embed(predicted)                       # inputs: (batch_size, embed_size)
+            inputs = inputs.unsqueeze(1)                         # inputs: (batch_size, 1, embed_size)
+        sampled_ids = torch.stack(sampled_ids, 1)                # sampled_ids: (batch_size, max_seq_length)
+        return sampled_ids
+    
         
 def res50_encoder(num_out):
     res_model = models.resnet50(pretrained=True)
