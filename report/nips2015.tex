@@ -68,6 +68,8 @@ The encoder will take the image as input and encode it into a vector of feature 
 		\hline
         RNN & Resnet50 & 300 & 512 & 2 & Adam & 0.001 & $10^{-5}$ \\
 	    \hline
+		LSTM+GloVe& Resnet50 & 300 & 512 & 1 & Adam & 0.001 & $10^{-5}$ \\
+	    \hline
     \end{tabular}
     \caption{Hyper-parameters for different models}
     \label{acc}
@@ -136,7 +138,7 @@ In this section, we show the performance of the network using pretrained word em
         \hline
         Model & Loss & Perplexity & BLEU-1 & BLEU-4 \\
 		\hline
-        LSTM with pretrained word embedding& NaN & NaN &87.31&19.02\\\hline
+        LSTM+GloVe& 2.30 & 9.97 &87.31&19.02\\\hline
         RNN & 2.46 & 11.68 & 87.04 & 17.22 \\
 	    \hline
     \end{tabular}
