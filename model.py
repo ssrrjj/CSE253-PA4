@@ -49,7 +49,8 @@ class Img_Caption(nn.Module):
             predicted = torch.argmax(outputs ,axis =1)                  # predicted: (batch_size)
             
             for j in range(batch_size):
-                predicted[j] = torch.as_tensor(np.random.choice( range(outputs.shape[1]), p = prob[j].cpu().data.numpy()))
+                #predicted[j] = torch.as_tensor(np.random.choice( range(outputs.shape[1]), p = prob[j].cpu().data.numpy()))
+                predicted[j] = torch.multinomial(prob[j], 1)
                 
             sampled_ids.append(predicted)
             inputs = self.embed(predicted)                       # inputs: (batch_size, embed_size)
