@@ -49,6 +49,16 @@ UC San Diego \\
 
 
 \section{Method}
+\subsection{LSTM}
+The baseline model use an encoder-decoder architecture. 
+The encoder will take the image as input and encode it into a vector of feature values.
+ The decoder will take this output from encoder as hidden state and starts to predict next words at each step.
+
+ For the encoder, we use a pretrained ResNet 50 and it outputs a  2048 dimensional feature map. Then, We use a Fully-connected layer to get 300 dimensional feature vector. \\
+ For the decoder, a LSTM is used to generate captions of images. In LSTM, we choose the demension of hidden states to be 512. \\
+ When we train LSTM, we use "Teacher Forcing” method. We use the teaching signal from the training dataset at the each time step.\\
+ For choice of loss function, we use CrossEntropyLoss. The training process is shown in Fig \ref{loss_lstm_no}.
+\subsection{vanilla RNN}
 
 \begin{figure}[htb!]
     \centering
@@ -57,7 +67,7 @@ UC San Diego \\
     \label{loss_fcn}
 \end{figure}
 
-\section{Experiments}
+
 
 \begin{figure}[htb!]
     \centering
@@ -66,7 +76,35 @@ UC San Diego \\
     \label{loss_fcn}
 \end{figure}
 
+\begin{figure}[htb!]
+    \centering
+     \includegraphics[width=0.8\textwidth]{lstm_no_pretrain_loss.png}
+    \caption{Training and validation loss of LSTM without pretrained embedding}
+    \label{loss_lstm_no}
+\end{figure}
 
+
+\section{Experiments}
+In this section, we will show the performance of our networks and discuss the reason why it performs well. There is three subsections. The first is using deterministic approach to generate captions . The second is using stochastic approach to generate captions. The Third is using pre-trained word embeddings.
+\subsection{deterministic approach}
+
+\subsection{stochastic approach}
+In this section, we show the BLEU-1 and BLEU-4 socres of our models.\\
+The result of the baseline model is shown in Table.\ref{baseline_table}. In the table, we can see that when Temperature = 0.1 the model performs the best. When Temperature is very little, stochastic approach is close to deterministic approach. The reason is that when Temperature is very low, the word with highest probability will equal to 1 which is quite same as the deterministic approach.
+
+\subsection{pre-trained word embeddings}
+In this section, we show the performance of the network using pretrained word embeddings.
+
+
+\begin{table}[htb!]
+    \begin{tabular}{lllllll}
+    Temperature & 0.1   & 0.2   & 0.7   & 1     & 1.5   & 2     \\
+    BLEU-1      & 87.29 & 87.22 & 87.05 & 85.89 & 72.19 & 55.73 \\
+    BLEU-4      & 17.3  & 17.13 & 15.41 & 13.16 & 5.66  & 3.48 
+    \end{tabular}
+    \caption{BLEU-1 and BLEU-4 scores of the baseline model with the stochastic approach}
+    \label{baseline_table}    
+\end{table}
 
 \section{Individual Contribution}
 
@@ -76,7 +114,7 @@ I implement transfer learning with DeepLabv3 and do experiments on basic CNN and
 \subsection*{Renjie Shao}
 I implement U-Net architecture and do experiments on U-Net. I also help implement IoU and visualization of segmentation and write some parts of the report.
 \subsection*{Hongyi Ling}
-I write the code of basic fcn and metrics. I also build different experimental CNN architectures and test these neural networks. In addition, I write these parts of the report.
+I implement the generation part of our model and do experiments on baseline model.  In addition, I write these parts of the report.
 
 \bibliographystyle{unsrt}
 \bibliography{references}
