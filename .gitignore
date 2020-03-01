@@ -11,3 +11,11 @@ best_model
 loss_lstm_pretrained
 *.txt
 *.json
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.gz
