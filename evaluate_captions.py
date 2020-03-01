@@ -29,8 +29,6 @@ def evaluate_captions( true_captions_path, generated_captions_path ):
         for entry in coco.imgToAnns[i]:
             reference.append(entry['caption'])
         count += 1
-        reference = [reference.split()]
-        candidate = candidate.split()
         score1 += sentence_bleu(reference, candidate, weights=(1, 0, 0, 0), smoothing_function=smoother.method1)
         score4 += sentence_bleu(reference, candidate, weights=(0, 0, 0, 1), smoothing_function=smoother.method1)
 
