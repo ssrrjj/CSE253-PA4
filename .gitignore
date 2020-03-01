@@ -8,3 +8,4 @@ data/
 .idea/
 glove.*
 best_model
+loss_lstm_pretrained
