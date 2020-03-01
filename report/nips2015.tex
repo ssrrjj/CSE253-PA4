@@ -72,10 +72,21 @@ UC San Diego \\
     \caption{Training and validation loss of vanilla RNN}
     \label{LSTM_pre_loss}
 \end{figure}
-
+\begin{table}[!htb]
+    \caption{Cross entropy loss and perplexity score on the test set}
+    \label{celoss}
+    \centering
+    \begin{tabular}{l|c|c|}
+        \hline
+        model & cross entropy loss & perplexity score \\
+		\hline
+		LSTM with pretrained word embedding&2.30&\\
+	    \hline
+    \end{tabular}
+\end{table}
 \begin{table}[!htb]
     \caption{BLEU-1 and BLEU-4 scores}
-    \label{acc}
+    \label{bleu}
     \centering
     \begin{tabular}{l|c|c|}
         \hline
@@ -85,6 +96,7 @@ UC San Diego \\
 	    \hline
     \end{tabular}
 \end{table}
+
 
 \section{Individual Contribution}
 
