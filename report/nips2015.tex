@@ -63,10 +63,28 @@ UC San Diego \\
     \centering
      \includegraphics[width=0.8\textwidth]{RNNloss}
     \caption{Training and validation loss of vanilla RNN}
-    \label{loss_fcn}
+    \label{RNNloss}
 \end{figure}
 
+\begin{figure}[htb!]
+    \centering
+     \includegraphics[width=0.8\textwidth]{LSTM_pretrainedloss}
+    \caption{Training and validation loss of vanilla RNN}
+    \label{LSTM_pre_loss}
+\end{figure}
 
+\begin{table}[!htb]
+    \caption{BLEU-1 and BLEU-4 scores}
+    \label{acc}
+    \centering
+    \begin{tabular}{l|c|c|}
+        \hline
+        model & BLEU-1 & BLEU-4 \\
+		\hline
+		LSTM with pretrained word embedding&87.31&19.02\\
+	    \hline
+    \end{tabular}
+\end{table}
 
 \section{Individual Contribution}
 
